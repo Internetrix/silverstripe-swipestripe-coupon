@@ -114,7 +114,7 @@ class Coupon extends DataObject implements PermissionProvider {
 		$mods = $order->TotalModifications();
 
 		if ($mods && $mods->exists()) foreach ($mods as $mod) {
-			if ($mod->ClassName != 'CouponModification') {
+			if ($mod->ClassName != 'CouponModification' && $mod->ClassName != 'FlatFeeShippingModification') {
 				$total += $mod->Amount()->getAmount();
 			}
 		}
