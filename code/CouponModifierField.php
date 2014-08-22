@@ -96,8 +96,19 @@ class CouponModifierField_Extension extends Extension {
 
 		if (!$coupon || !$coupon->exists()) {
 			$data['errorMessage'] = 'Coupon is invalid or expired.';
+		}else{
+		
+			$order = Cart::get_current_order();
+			if($order && $order->ID){
+				$orderSubTotal = $order->SubTotalPrice()->getAmount();
+				
+				if($orderSubTotal && isset($coupon->OrderOver) && $coupon->OrderOver > $orderSubTotal){
+					$data['errorMessage'] = 'Coupon is only valid for order over ' . $coupon->CouponConditionPrice()->Nice();
+				}
+			}
+		
 		}
-
+		
 		return json_encode($data);
 	}
 }

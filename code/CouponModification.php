@@ -20,13 +20,19 @@ class CouponModification extends Modification {
 			$code = Convert::raw2sql($order->CouponCode);		
 		}
 		
+		$orderSubTotal = $order->SubTotalPrice()->getAmount();
+		
 		$date = date('Y-m-d');
 		$coupon = Coupon::get()
 			->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
 			->first();
 
 		if ($coupon && $coupon->exists()) {
-
+			//check coupon condition.
+			if($orderSubTotal && isset($coupon->OrderOver) && $coupon->OrderOver && $coupon->OrderOver > $orderSubTotal){
+				return false;
+			}
+			
 			//Generate the Modification
 			$mod = new CouponModification();
 			$mod->Price = $coupon->Amount($order)->getAmount();

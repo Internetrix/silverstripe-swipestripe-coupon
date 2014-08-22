@@ -148,7 +148,8 @@ class Coupon_Extension extends DataExtension {
 	 * @see DataObjectDecorator::extraStatics()
 	 */
 	public static $has_many = array(
-		'Coupons' => 'Coupon'
+		'Coupons' => 'Coupon',
+		'AmountCoupons' => 'AmountCoupon'
 	);
 }
 
@@ -232,7 +233,15 @@ class Coupon_Admin extends ShopAdmin {
 					GridField::create(
 						'Coupons',
 						'Coupons',
-						$shopConfig->Coupons(),
+						$shopConfig->Coupons()->filter(array('ClassName' => 'Coupon')),
+						GridFieldConfig_HasManyRelationEditor::create()
+					)
+				)
+				, new Tab('CouponAmount',
+					GridField::create(
+						'AmountCoupons',
+						'Coupons - Amount',
+						$shopConfig->AmountCoupons(),
 						GridFieldConfig_HasManyRelationEditor::create()
 					)
 				)
