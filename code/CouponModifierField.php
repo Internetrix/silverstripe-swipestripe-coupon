@@ -99,7 +99,20 @@ class CouponModifierField_Extension extends Extension {
 		}else{
 		
 			$order = Cart::get_current_order();
+			
 			if($order && $order->ID){
+				//check is there sale item in this order.
+				$Items = $order->Items();
+				if($Items && $Items->Count()){
+					foreach ($Items as $ItemDO){
+						$ProductItem = $ItemDO->Product();
+						if($ProductItem && $ProductItem->ID && $ProductItem->IsSale()){
+							$data['errorMessage'] = 'Sorry, coupon codes are not valid for use on sale items.';
+							return json_encode($data);							
+						}
+					}
+				}
+				
 				$orderSubTotal = $order->SubTotalPrice()->getAmount();
 				
 				if($orderSubTotal && isset($coupon->OrderOver) && $coupon->OrderOver > $orderSubTotal){

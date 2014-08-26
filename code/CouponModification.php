@@ -26,8 +26,19 @@ class CouponModification extends Modification {
 		$coupon = Coupon::get()
 			->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
 			->first();
-
+		
 		if ($coupon && $coupon->exists()) {
+			//check is there sale item in this order.
+			$Items = $order->Items();
+			if($Items && $Items->Count()){
+				foreach ($Items as $ItemDO){
+					$ProductItem = $ItemDO->Product();
+					if($ProductItem && $ProductItem->ID && $ProductItem->IsSale()){
+						return false;
+					}
+				}
+			}
+			
 			//check coupon condition.
 			if($orderSubTotal && isset($coupon->OrderOver) && $coupon->OrderOver && $coupon->OrderOver > $orderSubTotal){
 				return false;
