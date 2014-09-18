@@ -70,7 +70,8 @@ class Coupon extends DataObject implements PermissionProvider {
 		return new FieldList(
 			$rootTab = new TabSet('Root',
 				$tabMain = new Tab('CouponRate',
-					TextField::create('Title', _t('Coupon.TITLE', 'Title')),
+					TextField::create('Title', _t('Coupon.TITLE', 'Title'))
+						->setRightTitle('This \'Title\' will appear in order summary.'),
 					TextField::create('Code', _t('Coupon.CODE', 'Code')),
 					NumericField::create('Discount', _t('Coupon.DISCOUNT', 'Coupon discount'))
 						->setRightTitle('As a percentage (%)'),
