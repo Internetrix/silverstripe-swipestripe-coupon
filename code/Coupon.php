@@ -78,6 +78,7 @@ class Coupon extends DataObject implements PermissionProvider {
 					NumericField::create('Discount', _t('Coupon.DISCOUNT', 'Coupon discount'))
 						->setRightTitle('As a percentage (%)'),
 					DateField::create('StartDate')
+						->setRightTitle('Leave it blank if start date is not required')
 						->setConfig('showcalendar', true),
 					DateField::create('Expiry')
 						->setConfig('showcalendar', true)
