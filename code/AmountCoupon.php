@@ -17,6 +17,7 @@ class AmountCoupon extends Coupon {
 		'Title' 			=> 'Title',
 		'Code' 				=> 'Code',
 		'DiscountAmount' 	=> 'Discount Amount',
+		'StartDate' 		=> 'Start Date',
 		'Expiry' 			=> 'Expiry'
 	);
 
@@ -35,6 +36,8 @@ class AmountCoupon extends Coupon {
 					PriceField::create('DiscountAmount', 'Coupon discount amount'),
 					PriceField::create('OrderOver', 'Coupon condition')
 						->setRightTitle('This coupon is valid, if order sub total over this condition amount. This value should larger than discount amount. If condition is less than discount amount, it will be automatically set as discount amount.'),
+					DateField::create('StartDate')
+						->setConfig('showcalendar', true),
 					DateField::create('Expiry')
 						->setConfig('showcalendar', true)
 				)

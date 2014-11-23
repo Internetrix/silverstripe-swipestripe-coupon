@@ -14,6 +14,7 @@ class Coupon extends DataObject implements PermissionProvider {
 		'Title' => 'Varchar',
 		'Code' => 'Varchar',
 		'Discount' => 'Decimal(18,2)',
+		'StartDate' => 'Date',
 		'Expiry' => 'Date'
 	);
 	
@@ -30,6 +31,7 @@ class Coupon extends DataObject implements PermissionProvider {
 		'Title' => 'Title',
 		'Code' => 'Code',
 		'SummaryOfDiscount' => 'Discount',
+		'StartDate' => 'Start Date',
 		'Expiry' => 'Expiry'
 	);
 
@@ -75,6 +77,8 @@ class Coupon extends DataObject implements PermissionProvider {
 					TextField::create('Code', _t('Coupon.CODE', 'Code')),
 					NumericField::create('Discount', _t('Coupon.DISCOUNT', 'Coupon discount'))
 						->setRightTitle('As a percentage (%)'),
+					DateField::create('StartDate')
+						->setConfig('showcalendar', true),
 					DateField::create('Expiry')
 						->setConfig('showcalendar', true)
 				)

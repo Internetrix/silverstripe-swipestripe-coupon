@@ -24,7 +24,7 @@ class CouponModification extends Modification {
 		
 		$date = date('Y-m-d');
 		$coupon = Coupon::get()
-			->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
+			->where("\"Code\" = '$code' AND ((\"StartDate\" IS NULL AND \"Expiry\" >= '$date') OR (\"StartDate\" IS NOT NULL AND \"StartDate\" <= '$date' AND \"Expiry\" >= '$date'))")
 			->first();
 		
 		if ($coupon && $coupon->exists()) {
