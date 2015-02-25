@@ -95,7 +95,9 @@ class CouponModifierField_Extension extends Extension {
 			->first();
 
 		if (!$coupon || !$coupon->exists()) {
-			$data['errorMessage'] = 'Coupon is invalid or expired.';
+			$data['errorMessage'] 		= 'Coupon is invalid or expired.';
+			$data['detail']['coupon']	= $code;
+			$data['detail']['status']	= 'Invalid';
 		}else{
 		
 			$order = Cart::get_current_order();
@@ -107,7 +109,9 @@ class CouponModifierField_Extension extends Extension {
 					foreach ($Items as $ItemDO){
 						$ProductItem = $ItemDO->Product();
 						if($ProductItem && $ProductItem->ID && $ProductItem->IsSale()){
-							$data['errorMessage'] = 'Sorry, coupon codes are not valid for use on sale items.';
+							$data['errorMessage'] 		= 'Sorry, coupon codes are not valid for use on sale items.';
+							$data['detail']['coupon']	= $code;
+							$data['detail']['status']	= 'Invalid';
 							return json_encode($data);							
 						}
 					}
@@ -116,10 +120,25 @@ class CouponModifierField_Extension extends Extension {
 				$orderSubTotal = $order->SubTotalPrice()->getAmount();
 				
 				if($orderSubTotal && isset($coupon->OrderOver) && $coupon->OrderOver > $orderSubTotal){
-					$data['errorMessage'] = 'Coupon is only valid for order over ' . $coupon->CouponConditionPrice()->Nice();
+					$data['errorMessage'] 		= 'Coupon is only valid for order over ' . $coupon->CouponConditionPrice()->Nice();
+					$data['detail']['coupon']	= $code;
+					$data['detail']['status']	= 'Invalid';
 				}
 			}
 		
+		}
+		
+		if($data['errorMessage'] === null){
+			if($coupon->ClassName == 'Coupon'){
+				$discount = number_format($coupon->Discount, 2) . '%';
+			}else{
+				$discount = number_format($coupon->DiscountAmount, 2);
+			}
+			
+			$data['detail']['coupon']	= $code;
+			$data['detail']['status']	= 'Valid';
+			$data['detail']['name']		= $coupon->Title;
+			$data['detail']['discount']	= $discount;
 		}
 		
 		return json_encode($data);
